@@ -1,0 +1,3169 @@
+{
+	"info": {
+		"_postman_id": "4cd1a71a-3088-40b4-823d-de4042070dc2",
+		"name": "OrangeHRM Casos de Prueba",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44624065",
+		"_collection_link": "https://www.postman.com/silvias-team/workspace/14a8f8cf-d9e9-4d8d-9cce-52c3db77f13c/collection/44624065-4cd1a71a-3088-40b4-823d-de4042070dc2?action=share&source=collection_link&creator=44624065"
+	},
+	"item": [
+		{
+			"name": "Backend",
+			"item": [
+				{
+					"name": "CP-08 Obtener datos del dashboard",
+					"item": [
+						{
+							"name": "Dashboard - Locations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"pm.test(\"Response has 'data' property\", function () {",
+											"    pm.expect(jsonData).to.have.property('data');",
+											"    pm.expect(jsonData.data).to.be.an('array');",
+											"});",
+											"pm.test(\"Response has 'meta' property (object)\", function () {",
+											"    pm.expect(jsonData).to.have.property('meta');",
+											"    pm.expect(jsonData.meta).to.be.an('object');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/dashboard/employees/locations",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"dashboard",
+										"employees",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dashboard - Shortcuts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"// Dashboard - Shortcuts",
+											"pm.test(\"La respuesta tiene status 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"'data' es un objeto\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('data');",
+											"    pm.expect(jsonData.data).to.be.an('object');",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/dashboard/shortcuts",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"dashboard",
+										"shortcuts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dashboard - Time at Work",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"// Test: 'data' is an array and each element has the required structure",
+											"pm.test(\"'data' is an array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('data').that.is.an('array');",
+											"});",
+											"",
+											"pm.test(\"Each element in 'data' has 'workDay' and 'totalTime' with correct structure\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.data.forEach(function(item) {",
+											"        pm.expect(item).to.have.property('workDay').that.is.an('object');",
+											"        pm.expect(item.workDay).to.have.all.keys('id', 'day', 'date');",
+											"        pm.expect(item).to.have.property('totalTime').that.is.an('object');",
+											"        pm.expect(item.totalTime).to.have.all.keys('hours', 'minutes');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/dashboard/employees/time-at-work",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"dashboard",
+										"employees",
+										"time-at-work"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dashboard - Leaves",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"pm.test(\"Response has 'data' property \", function () {",
+											"    pm.expect(jsonData).to.have.property('data');",
+											"    pm.expect(jsonData.data).to.be.an('array');",
+											"});",
+											"pm.test(\"Response has 'meta' property (object) with 'leavePeriodDefined'\", function () {",
+											"    pm.expect(jsonData).to.have.property('meta');",
+											"    pm.expect(jsonData.meta).to.be.an('object');",
+											"    pm.expect(jsonData.meta).to.have.property('leavePeriodDefined');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/dashboard/employees/leaves?date=2025-11-26",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"dashboard",
+										"employees",
+										"leaves"
+									],
+									"query": [
+										{
+											"key": "date",
+											"value": "2025-11-26"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dashboard - Action Summary",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"// Test: 'data' is an array and each element has the required properties",
+											"pm.test(\"'data' is an array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('data').that.is.an('array');",
+											"});",
+											"",
+											"pm.test(\"Each element in 'data' has 'id', 'group', and 'pendingActionCount'\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.data.forEach(function(item) {",
+											"        pm.expect(item).to.have.property('id');",
+											"        pm.expect(item).to.have.property('group');",
+											"        pm.expect(item).to.have.property('pendingActionCount');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/dashboard/employees/action-summary",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"dashboard",
+										"employees",
+										"action-summary"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dashboard - Subunit",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"// Dashboard - Subunit",
+											"pm.test(\"La respuesta tiene status 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Cada elemento de 'data' tiene una propiedad 'subunit' con 'id'\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('data');",
+											"    pm.expect(jsonData.data).to.be.an('array');",
+											"    jsonData.data.forEach(function(item) {",
+											"        pm.expect(item).to.have.property('subunit');",
+											"        pm.expect(item.subunit).to.be.an('object');",
+											"        pm.expect(item.subunit).to.have.property('id');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/dashboard/employees/subunit",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"dashboard",
+										"employees",
+										"subunit"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dashboard - Buzz Feed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"pm.test(\"Response has 'data' property\", function () {",
+											"    pm.expect(jsonData).to.have.property('data');",
+											"    pm.expect(jsonData.data).to.be.an('array');",
+											"});",
+											"pm.test(\"Each feed item has required fields\", function () {",
+											"    if (Array.isArray(jsonData.data)) {",
+											"        jsonData.data.forEach(function(item) {",
+											"            pm.expect(item).to.have.property('id');",
+											"            pm.expect(item).to.have.property('type');",
+											"        });",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/buzz/feed",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"buzz",
+										"feed"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CP-05 Editar datos de un empleado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validar que la respuesta sea exitosa (200 OK)",
+									"pm.test(\"La respuesta debe ser 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"// Validar que el header Content-Type sea application/json",
+									"pm.test(\"El header Content-Type debe ser application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{SESSION_COOKIE}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Sil\",\r\n    \"lastName\": \"Chaves\",\r\n    \"employeeId\": \"{{param1}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"api",
+								"v2",
+								"pim",
+								"employees",
+								"{{param1}}",
+								"personal-details"
+							]
+						},
+						"description": "PUT para editar datos personales de un empleado usando {{param1}}. Body JSON: firstName, lastName, employeeId, maritalStatus, nationalityId, dateOfBirth, gender, etc."
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"NuevoNombre\",\r\n    \"lastName\": \"NuevoApellido\",\r\n    \"employeeId\": \"{{param1}}\",\r\n    \"maritalStatus\": \"Single\",\r\n    \"nationalityId\": \"1\",\r\n    \"dateOfBirth\": \"1990-01-01\",\r\n    \"gender\": \"M\"\r\n}",
+									"options": {
+										"raw": "json"
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees",
+										"{{param1}}",
+										"personal-details"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 04:25:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								}
+							],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Sil\",\r\n    \"lastName\": \"Chaves\",\r\n    \"employeeId\": \"{{param1}}\",\r\n    \"dateOfBirth\": \"1990-01-01\",\r\n    \"_token\": \"{{CSRF_TOKEN}}\"\r\n}",
+									"options": {
+										"raw": "json"
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees",
+										"{{param1}}",
+										"personal-details"
+									]
+								}
+							},
+							"status": "Unprocessable Content",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 04:46:12 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"status\": \"422\",\n        \"message\": \"Invalid Parameter\",\n        \"data\": {\n            \"invalidParamKeys\": [\n                \"dateOfBirth\",\n                \"_token\"\n            ]\n        }\n    }\n}"
+						},
+						{
+							"name": "test3",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Sil\",\r\n    \"lastName\": \"Chaves\",\r\n    \"employeeId\": \"{{param1}}\"\r\n}",
+									"options": {
+										"raw": "json"
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees",
+										"{{param1}}",
+										"personal-details"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:37:50 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"empNumber\": 7,\n        \"lastName\": \"Chaves\",\n        \"firstName\": \"Sil\",\n        \"middleName\": \"\",\n        \"employeeId\": \"7\",\n        \"otherId\": \"\",\n        \"drivingLicenseNo\": \"\",\n        \"drivingLicenseExpiredDate\": null,\n        \"gender\": null,\n        \"maritalStatus\": \"\",\n        \"birthday\": null,\n        \"terminationId\": null,\n        \"nationality\": {\n            \"id\": null,\n            \"name\": null\n        }\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "CP-04 Registrar nuevo empleado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 1) Validar status 200 o 201\r",
+									"pm.test(\"Status code is 200 o 201\", function () {\r",
+									"    pm.expect([200, 201]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// 2) Validar que el body incluya 'data' y 'employeeId'\r",
+									"pm.test(\"Body incluye data y employeeId\", function () {\r",
+									"    var jsonData = {};\r",
+									"    try {\r",
+									"        jsonData = pm.response.json();\r",
+									"    } catch (e) {\r",
+									"        pm.expect.fail(\"La respuesta no es un JSON válido\");\r",
+									"    }\r",
+									"    pm.expect(jsonData).to.have.property('data');\r",
+									"    pm.expect(jsonData.data).to.have.property('employeeId');\r",
+									"});\r",
+									"\r",
+									"// 3) Reportar claramente si la respuesta es diferente (error 400, 401, etc.)\r",
+									"pm.test(\"Respuesta con error es reportada claramente\", function () {\r",
+									"    if (![200, 201].includes(pm.response.code)) {\r",
+									"        pm.expect.fail(`Respuesta con error: código ${pm.response.code}. Body: ${pm.response.text()}`);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Genera un ID aleatorio de 6 dígitos\r",
+									"const randomEmpId = Math.floor(100000 + Math.random() * 900000).toString();\r",
+									"pm.environment.set(\"randomEmpId\", randomEmpId);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{SESSION_COOKIE}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Sil\",\r\n    \"middleName\": \"Mata\",\r\n    \"lastName\": \"Chaves\",\r\n    \"employeeId\": \"{{randomEmpId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"api",
+								"v2",
+								"pim",
+								"employees"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Silvia\",\r\n    \"middleName\": \"Mata\",\r\n    \"lastName\": \"Chaves\",\r\n    \"employeeId\": \"{{randomEmpId}}\"\r\n}",
+									"options": {
+										"raw": "json"
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:17:15 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"empNumber\": 215,\n        \"lastName\": \"Chaves\",\n        \"firstName\": \"Silvia\",\n        \"middleName\": \"Mata\",\n        \"employeeId\": \"7624\",\n        \"terminationId\": null\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Sil\",\r\n    \"middleName\": \"Mata\",\r\n    \"lastName\": \"Chaves\",\r\n    \"employeeId\": \"{{randomEmpId}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 06:06:58 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"empNumber\": 189,\n        \"lastName\": \"Chaves\",\n        \"firstName\": \"Sil\",\n        \"middleName\": \"Mata\",\n        \"employeeId\": \"124639\",\n        \"terminationId\": null\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "CP-03 Cerrar sesión",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Logout exitoso: contiene <title>OrangeHRM y <auth-login>\", function () {",
+									"    var html = pm.response.text();",
+									"",
+									"    // Validar el título (ignorando espacios y mayúsculas)",
+									"    pm.expect(/<title>\\s*OrangeHRM\\s*<\\/title>/i.test(html)).to.be.true;",
+									"",
+									"    // Validar la presencia del componente auth-login (puede tener atributos)",
+									"    pm.expect(/<auth-login[\\s>]/i.test(html)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{SESSION_COOKIE}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/auth/logout",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/logout",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 04:10:56 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n            We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n        </strong>\n        </noscript>\n        <div id=\"app\">\n            <auth-login\n            :token=\"&quot;2fdea8a50159bcecbf432897d6.eWWTadFLn_R-HisSn4JXv0qsPL981ykAmhgdlolr8vs.Cw7SPeI-x4wpakF-z68E6xz4V9YU4V9E9C1x574fkL8QUqc2uQLLuxV1cg&quot;\"\n            :login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"\n            :login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1721393199309&quot;\"\n            :show-social-media=\"true\"\n            :is-demo-mode=\"true\"\n            :authenticators=\"[]\"\n        >\n                <template v-slot:footer>\n                    <div class=\"orangehrm-copyright-wrapper\">\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                            <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                        </oxd-text>\n                    </div>\n                </template>\n            </auth-login>\n        </div>\n        <script type=\"text/javascript\">\n        window.appGlobal = {\n          baseUrl: \"/web/index.php\",\n          publicPath: \"/web\",\n        };\n    </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/logout",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 04:13:29 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n            We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n        </strong>\n        </noscript>\n        <div id=\"app\">\n            <auth-login\n            :token=\"&quot;7885.A0X_YvZg7wrHc4lrx0cGgOCgwgle4vjqnkurB_l5doM.cS6-NsUVt3KQB-MHl2pV1Lb0qWA21I6u8H7Hds4NFMdqcss9nim7RawY0A&quot;\"\n            :login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"\n            :login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1721393199309&quot;\"\n            :show-social-media=\"true\"\n            :is-demo-mode=\"true\"\n            :authenticators=\"[]\"\n        >\n                <template v-slot:footer>\n                    <div class=\"orangehrm-copyright-wrapper\">\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                            <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                        </oxd-text>\n                    </div>\n                </template>\n            </auth-login>\n        </div>\n        <script type=\"text/javascript\">\n        window.appGlobal = {\n          baseUrl: \"/web/index.php\",\n          publicPath: \"/web\",\n        };\n    </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test3",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/logout",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:32:24 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n            We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n        </strong>\n        </noscript>\n        <div id=\"app\">\n            <auth-login\n            :token=\"&quot;6d.4fDiY4hxItBDGKnMkIU4Jl01slZq0yWjVVBioboEZOA.ppu6D81Fc6YldMKEpOFyURFE7RwZ5WzHIgkpk_B3F7mMiKwa8R8X4DZK_A&quot;\"\n            :login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"\n            :login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1721393199309&quot;\"\n            :show-social-media=\"true\"\n            :is-demo-mode=\"true\"\n            :authenticators=\"[]\"\n        >\n                <template v-slot:footer>\n                    <div class=\"orangehrm-copyright-wrapper\">\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                            <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                        </oxd-text>\n                    </div>\n                </template>\n            </auth-login>\n        </div>\n        <script type=\"text/javascript\">\n        window.appGlobal = {\n          baseUrl: \"/web/index.php\",\n          publicPath: \"/web\",\n        };\n    </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "CP-02 Login con credenciales inválidas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login inválido: se muestra el dashboard\", function () {",
+									"    const html = pm.response.text();",
+									"    // Buscar el componente <view-dashboard> en el HTML",
+									"    const hasDashboardComponent = /<view-dashboard[\\s>]/i.test(html);",
+									"    pm.expect(hasDashboardComponent, \"No se encontró el componente <view-dashboard> en el HTML del dashboard\").to.be.true;",
+									"    // Alternativamente, buscar otros identificadores típicos del dashboard",
+									"    // Ejemplo: buscar un div con id=\"dashboard\" o clase relacionada",
+									"    const hasDashboardId = /<div[^>]*id=[\"']dashboard[\"'][^>]*>/i.test(html);",
+									"    const hasDashboardClass = /<div[^>]*class=[\"'][^\"']*dashboard[^\"']*[\"'][^>]*>/i.test(html);",
+									"    pm.expect(hasDashboardId || hasDashboardClass || hasDashboardComponent, \"No se encontró ningún identificador confiable del dashboard en el HTML\").to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "usuario_incorrecto",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "contraseña_incorrecta",
+									"type": "text"
+								},
+								{
+									"key": "_token",
+									"value": "{{CSRF_TOKEN}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"auth",
+								"validate"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "usuario_incorrecto",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "contraseña_incorrecta",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Nov 2025 13:05:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#150a01;\n            --oxd-primary-font-color:#d80606;\n            --oxd-secondary-four-color:#050801;\n            --oxd-secondary-font-color:#e90b0b;\n            --oxd-primary-gradient-start-color:#070400;\n            --oxd-primary-gradient-end-color:#0d0400;\n            --oxd-secondary-gradient-start-color:#070400;\n            --oxd-secondary-gradient-end-color:#0d0400;\n            --oxd-primary-one-lighten-5-color:#2d1602;\n            --oxd-primary-one-lighten-30-color:#a75008;\n            --oxd-primary-one-darken-5-color:black;\n            --oxd-primary-one-alpha-10-color:rgba(21, 10, 1, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(21, 10, 1, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(21, 10, 1, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(21, 10, 1, 0.5);\n            --oxd-secondary-four-lighten-5-color:#131f04;\n            --oxd-secondary-four-darken-5-color:black;\n            --oxd-secondary-four-alpha-10-color:rgba(5, 8, 1, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(5, 8, 1, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(5, 8, 1, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(5, 8, 1, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n      We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n    </strong>\n        </noscript>\n        <div id=\"app\">\n            <oxd-layout\n        home-url=\"https://www.orangehrm.com/\"\n        :sidepanel-menu-items=\"[{&quot;id&quot;:1,&quot;name&quot;:&quot;Admin&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/admin\\/viewAdminModule&quot;,&quot;icon&quot;:&quot;admin&quot;},{&quot;id&quot;:30,&quot;name&quot;:&quot;PIM&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPimModule&quot;,&quot;icon&quot;:&quot;pim&quot;},{&quot;id&quot;:41,&quot;name&quot;:&quot;Leave&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/leave\\/viewLeaveModule&quot;,&quot;icon&quot;:&quot;leave&quot;},{&quot;id&quot;:52,&quot;name&quot;:&quot;Time&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/time\\/viewTimeModule&quot;,&quot;icon&quot;:&quot;time&quot;},{&quot;id&quot;:65,&quot;name&quot;:&quot;Recruitment&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/recruitment\\/viewRecruitmentModule&quot;,&quot;icon&quot;:&quot;recruitment&quot;},{&quot;id&quot;:40,&quot;name&quot;:&quot;My Info&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewMyDetails&quot;,&quot;icon&quot;:&quot;myinfo&quot;},{&quot;id&quot;:83,&quot;name&quot;:&quot;Performance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/performance\\/viewPerformanceModule&quot;,&quot;icon&quot;:&quot;performance&quot;},{&quot;id&quot;:82,&quot;name&quot;:&quot;Dashboard&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/dashboard\\/index&quot;,&quot;icon&quot;:&quot;dashboard&quot;,&quot;active&quot;:true},{&quot;id&quot;:93,&quot;name&quot;:&quot;Directory&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/directory\\/viewDirectory&quot;,&quot;icon&quot;:&quot;directory&quot;},{&quot;id&quot;:96,&quot;name&quot;:&quot;Maintenance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/maintenance\\/viewMaintenanceModule&quot;,&quot;icon&quot;:&quot;maintenance&quot;},{&quot;id&quot;:105,&quot;name&quot;:&quot;Claim&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/claim\\/viewClaimModule&quot;,&quot;icon&quot;:&quot;claim&quot;},{&quot;id&quot;:101,&quot;name&quot;:&quot;Buzz&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/buzz\\/viewBuzz&quot;,&quot;icon&quot;:&quot;buzz&quot;}]\"\n        :topbar-menu-items=\"[]\"\n        :user=\"{&quot;firstName&quot;:&quot;manda&quot;,&quot;lastName&quot;:&quot;userPoojariPoojari&quot;,&quot;profImgSrc&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPhoto\\/empNumber\\/7&quot;,&quot;hasPassword&quot;:true}\"\n        brand-logo-src=\"/web/images/orange.png?v=1721393199309\"\n        brand-banner-src=\"/web/images/orangehrm-logo.png?v=1721393199309\"\n        logout-url=\"/web/index.php/auth/logout\"\n        support-url=\"/web/index.php/help/support\"\n        :update-password-url=\"&quot;/web/index.php/pim/updatePassword&quot;\"\n        :permissions=\"{&quot;dashboard_subunit_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_location_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_leave_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_time_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_employees_on_leave_today_config&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:true,&quot;canDelete&quot;:false},&quot;dashboard_buzz_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false}}\"\n        :breadcrumb=\"{&quot;moduleName&quot;:&quot;Dashboard&quot;,&quot;level&quot;:null}\"\n        :date-format=\"{&quot;id&quot;:&quot;Y-d-m&quot;,&quot;label&quot;:&quot;yyyy-dd-mm&quot;}\"\n        help-url=\"/web/index.php/help/help?label=dashboard_index\"\n        :show-upgrade=\"1\"\n    >\n                <view-dashboard\n            >\n    </view-dashboard>\n                <template v-slot:footer>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                        <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                    </oxd-text>\n                    <br>\n                </template>\n            </oxd-layout>\n        </div>\n        <script type=\"text/javascript\">\n      window.appGlobal = {\n        baseUrl: \"/web/index.php\",\n        publicPath: \"/web\",\n      };\n  </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "usuario_incorrecto",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "contraseña_incorrecta",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 03:59:30 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#4193A6;\n            --oxd-primary-font-color:#652274;\n            --oxd-secondary-four-color:#7C96C0;\n            --oxd-secondary-font-color:#7EFABC;\n            --oxd-primary-gradient-start-color:#B074CB;\n            --oxd-primary-gradient-end-color:#DCBF28;\n            --oxd-secondary-gradient-start-color:#B074CB;\n            --oxd-secondary-gradient-end-color:#DCBF28;\n            --oxd-primary-one-lighten-5-color:#49a3b8;\n            --oxd-primary-one-lighten-30-color:#a4d1dc;\n            --oxd-primary-one-darken-5-color:#3a8394;\n            --oxd-primary-one-alpha-10-color:rgba(65, 147, 166, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(65, 147, 166, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(65, 147, 166, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(65, 147, 166, 0.5);\n            --oxd-secondary-four-lighten-5-color:#8da4c8;\n            --oxd-secondary-four-darken-5-color:#6b88b8;\n            --oxd-secondary-four-alpha-10-color:rgba(124, 150, 192, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(124, 150, 192, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(124, 150, 192, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(124, 150, 192, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n            We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n        </strong>\n        </noscript>\n        <div id=\"app\">\n            <auth-login\n            :error=\"{&quot;error&quot;:&quot;invalid_csrf_token&quot;,&quot;message&quot;:&quot;CSRF token validation failed&quot;}\"\n            :token=\"&quot;5b3e82155.qPTr78aqsR43TvBDjpkdrtS3ExeILkWm0FBsnMk5otU.2p-qu_Xf6WZgOpov3rRO-oLjeH7gGDPivmUA7f5NwJHBw9-wruPlUVwlqQ&quot;\"\n            :login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"\n            :login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1721393199309&quot;\"\n            :show-social-media=\"true\"\n            :is-demo-mode=\"true\"\n            :authenticators=\"[]\"\n        >\n                <template v-slot:footer>\n                    <div class=\"orangehrm-copyright-wrapper\">\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                            <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                        </oxd-text>\n                    </div>\n                </template>\n            </auth-login>\n        </div>\n        <script type=\"text/javascript\">\n        window.appGlobal = {\n          baseUrl: \"/web/index.php\",\n          publicPath: \"/web\",\n        };\n    </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test3",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "usuario_incorrecto",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "contraseña_incorrecta",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 04:01:01 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n            We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n        </strong>\n        </noscript>\n        <div id=\"app\">\n            <auth-login\n            :error=\"{&quot;error&quot;:&quot;invalid_csrf_token&quot;,&quot;message&quot;:&quot;CSRF token validation failed&quot;}\"\n            :token=\"&quot;2171dc400a3056e2b4d4.U6qK9ZTmVKeIztmj3r00H4eQlI9qYtU9ZlGTPp8BrB8.IcHLoaeTDN_furPPjpBnS9HE_-YCVKN5CGT_T6h1zls6nb6q_K8A6OOlgA&quot;\"\n            :login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"\n            :login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1721393199309&quot;\"\n            :show-social-media=\"true\"\n            :is-demo-mode=\"true\"\n            :authenticators=\"[]\"\n        >\n                <template v-slot:footer>\n                    <div class=\"orangehrm-copyright-wrapper\">\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                            <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                        </oxd-text>\n                    </div>\n                </template>\n            </auth-login>\n        </div>\n        <script type=\"text/javascript\">\n        window.appGlobal = {\n          baseUrl: \"/web/index.php\",\n          publicPath: \"/web\",\n        };\n    </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test4",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "usuario_incorrecto",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "contraseña_incorrecta",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 04:04:44 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n            We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n        </strong>\n        </noscript>\n        <div id=\"app\">\n            <auth-login\n            :error=\"{&quot;error&quot;:&quot;invalid_csrf_token&quot;,&quot;message&quot;:&quot;CSRF token validation failed&quot;}\"\n            :token=\"&quot;44eedadca29e08e6a45020500.mMyM6GsYP1ZW1vKZNKo651E1Euu7srmWE3lwBHCT7wI.6qfNvFhtZy4Bopj1ZIdpswdheYLThM_SfUwcdUfnjUbx-7i3A1FrGT29qw&quot;\"\n            :login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"\n            :login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1721393199309&quot;\"\n            :show-social-media=\"true\"\n            :is-demo-mode=\"true\"\n            :authenticators=\"[]\"\n        >\n                <template v-slot:footer>\n                    <div class=\"orangehrm-copyright-wrapper\">\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                        <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                            <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                        </oxd-text>\n                    </div>\n                </template>\n            </auth-login>\n        </div>\n        <script type=\"text/javascript\">\n        window.appGlobal = {\n          baseUrl: \"/web/index.php\",\n          publicPath: \"/web\",\n        };\n    </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test5",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "usuario_incorrecto",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "contraseña_incorrecta",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:30:23 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n      We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n    </strong>\n        </noscript>\n        <div id=\"app\">\n            <oxd-layout\n        home-url=\"https://www.orangehrm.com/\"\n        :sidepanel-menu-items=\"[{&quot;id&quot;:1,&quot;name&quot;:&quot;Admin&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/admin\\/viewAdminModule&quot;,&quot;icon&quot;:&quot;admin&quot;},{&quot;id&quot;:30,&quot;name&quot;:&quot;PIM&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPimModule&quot;,&quot;icon&quot;:&quot;pim&quot;},{&quot;id&quot;:41,&quot;name&quot;:&quot;Leave&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/leave\\/viewLeaveModule&quot;,&quot;icon&quot;:&quot;leave&quot;},{&quot;id&quot;:52,&quot;name&quot;:&quot;Time&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/time\\/viewTimeModule&quot;,&quot;icon&quot;:&quot;time&quot;},{&quot;id&quot;:65,&quot;name&quot;:&quot;Recruitment&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/recruitment\\/viewRecruitmentModule&quot;,&quot;icon&quot;:&quot;recruitment&quot;},{&quot;id&quot;:40,&quot;name&quot;:&quot;My Info&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewMyDetails&quot;,&quot;icon&quot;:&quot;myinfo&quot;},{&quot;id&quot;:83,&quot;name&quot;:&quot;Performance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/performance\\/viewPerformanceModule&quot;,&quot;icon&quot;:&quot;performance&quot;},{&quot;id&quot;:82,&quot;name&quot;:&quot;Dashboard&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/dashboard\\/index&quot;,&quot;icon&quot;:&quot;dashboard&quot;,&quot;active&quot;:true},{&quot;id&quot;:93,&quot;name&quot;:&quot;Directory&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/directory\\/viewDirectory&quot;,&quot;icon&quot;:&quot;directory&quot;},{&quot;id&quot;:96,&quot;name&quot;:&quot;Maintenance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/maintenance\\/viewMaintenanceModule&quot;,&quot;icon&quot;:&quot;maintenance&quot;},{&quot;id&quot;:105,&quot;name&quot;:&quot;Claim&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/claim\\/viewClaimModule&quot;,&quot;icon&quot;:&quot;claim&quot;},{&quot;id&quot;:101,&quot;name&quot;:&quot;Buzz&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/buzz\\/viewBuzz&quot;,&quot;icon&quot;:&quot;buzz&quot;}]\"\n        :topbar-menu-items=\"[]\"\n        :user=\"{&quot;firstName&quot;:&quot;nainika&quot;,&quot;lastName&quot;:&quot;joseph&quot;,&quot;profImgSrc&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPhoto\\/empNumber\\/7&quot;,&quot;hasPassword&quot;:true}\"\n        brand-logo-src=\"/web/images/orange.png?v=1721393199309\"\n        brand-banner-src=\"/web/images/orangehrm-logo.png?v=1721393199309\"\n        logout-url=\"/web/index.php/auth/logout\"\n        support-url=\"/web/index.php/help/support\"\n        :update-password-url=\"&quot;/web/index.php/pim/updatePassword&quot;\"\n        :permissions=\"{&quot;dashboard_subunit_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_location_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_leave_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_time_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_employees_on_leave_today_config&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:true,&quot;canDelete&quot;:false},&quot;dashboard_buzz_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false}}\"\n        :breadcrumb=\"{&quot;moduleName&quot;:&quot;Dashboard&quot;,&quot;level&quot;:null}\"\n        :date-format=\"{&quot;id&quot;:&quot;Y-d-m&quot;,&quot;label&quot;:&quot;yyyy-dd-mm&quot;}\"\n        help-url=\"/web/index.php/help/help?label=dashboard_index\"\n        :show-upgrade=\"1\"\n    >\n                <view-dashboard\n            >\n    </view-dashboard>\n                <template v-slot:footer>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                        <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                    </oxd-text>\n                    <br>\n                </template>\n            </oxd-layout>\n        </div>\n        <script type=\"text/javascript\">\n      window.appGlobal = {\n        baseUrl: \"/web/index.php\",\n        publicPath: \"/web\",\n      };\n  </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "Cp-00 Recibir Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: status 200 y extraer token si viene embebido en HTML\r",
+									"pm.test(\"Status is 200\", () => pm.response.to.have.status(200));\r",
+									"\r",
+									"// Extraer CSRF token embebido en :token del componente auth-login o input hidden _token\r",
+									"try {\r",
+									"  const body = pm.response.text();\r",
+									"  const tokenAttrMatch = body.match(/:token=\\\"([^\\\"]+)\\\"/);\r",
+									"  if (tokenAttrMatch && tokenAttrMatch[1]) {\r",
+									"    let raw = tokenAttrMatch[1];\r",
+									"    raw = raw.replace(/&quot;/g, '\"').replace(/&amp;/g, '&');\r",
+									"    raw = raw.replace(/^\"+|\"+$/g, '');\r",
+									"    pm.environment.set(\"CSRF_TOKEN\", raw);\r",
+									"    console.log(\"CSRF_TOKEN set:\", raw);\r",
+									"  } else {\r",
+									"    const alt = body.match(/name=['\"]_token['\"]\\s+value=['\"]([^'\"]+)['\"]/);\r",
+									"    if (alt && alt[1]) {\r",
+									"      pm.environment.set(\"CSRF_TOKEN\", alt[1]);\r",
+									"      console.log(\"CSRF_TOKEN set (from hidden input):\", alt[1]);\r",
+									"    } else {\r",
+									"      console.log(\"No token found in :token nor hidden input\");\r",
+									"    }\r",
+									"  }\r",
+									"} catch (e) {\r",
+									"  console.log(\"Error extracting token:\", e);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Nov 2025 12:59:22 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#150a01;\n            --oxd-primary-font-color:#d80606;\n            --oxd-secondary-four-color:#050801;\n            --oxd-secondary-font-color:#e90b0b;\n            --oxd-primary-gradient-start-color:#070400;\n            --oxd-primary-gradient-end-color:#0d0400;\n            --oxd-secondary-gradient-start-color:#070400;\n            --oxd-secondary-gradient-end-color:#0d0400;\n            --oxd-primary-one-lighten-5-color:#2d1602;\n            --oxd-primary-one-lighten-30-color:#a75008;\n            --oxd-primary-one-darken-5-color:black;\n            --oxd-primary-one-alpha-10-color:rgba(21, 10, 1, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(21, 10, 1, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(21, 10, 1, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(21, 10, 1, 0.5);\n            --oxd-secondary-four-lighten-5-color:#131f04;\n            --oxd-secondary-four-darken-5-color:black;\n            --oxd-secondary-four-alpha-10-color:rgba(5, 8, 1, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(5, 8, 1, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(5, 8, 1, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(5, 8, 1, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n      We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n    </strong>\n        </noscript>\n        <div id=\"app\">\n            <oxd-layout\n        home-url=\"https://www.orangehrm.com/\"\n        :sidepanel-menu-items=\"[{&quot;id&quot;:1,&quot;name&quot;:&quot;Admin&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/admin\\/viewAdminModule&quot;,&quot;icon&quot;:&quot;admin&quot;},{&quot;id&quot;:30,&quot;name&quot;:&quot;PIM&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPimModule&quot;,&quot;icon&quot;:&quot;pim&quot;},{&quot;id&quot;:41,&quot;name&quot;:&quot;Leave&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/leave\\/viewLeaveModule&quot;,&quot;icon&quot;:&quot;leave&quot;},{&quot;id&quot;:52,&quot;name&quot;:&quot;Time&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/time\\/viewTimeModule&quot;,&quot;icon&quot;:&quot;time&quot;},{&quot;id&quot;:65,&quot;name&quot;:&quot;Recruitment&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/recruitment\\/viewRecruitmentModule&quot;,&quot;icon&quot;:&quot;recruitment&quot;},{&quot;id&quot;:40,&quot;name&quot;:&quot;My Info&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewMyDetails&quot;,&quot;icon&quot;:&quot;myinfo&quot;},{&quot;id&quot;:83,&quot;name&quot;:&quot;Performance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/performance\\/viewPerformanceModule&quot;,&quot;icon&quot;:&quot;performance&quot;},{&quot;id&quot;:82,&quot;name&quot;:&quot;Dashboard&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/dashboard\\/index&quot;,&quot;icon&quot;:&quot;dashboard&quot;,&quot;active&quot;:true},{&quot;id&quot;:93,&quot;name&quot;:&quot;Directory&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/directory\\/viewDirectory&quot;,&quot;icon&quot;:&quot;directory&quot;},{&quot;id&quot;:96,&quot;name&quot;:&quot;Maintenance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/maintenance\\/viewMaintenanceModule&quot;,&quot;icon&quot;:&quot;maintenance&quot;},{&quot;id&quot;:105,&quot;name&quot;:&quot;Claim&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/claim\\/viewClaimModule&quot;,&quot;icon&quot;:&quot;claim&quot;},{&quot;id&quot;:101,&quot;name&quot;:&quot;Buzz&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/buzz\\/viewBuzz&quot;,&quot;icon&quot;:&quot;buzz&quot;}]\"\n        :topbar-menu-items=\"[]\"\n        :user=\"{&quot;firstName&quot;:&quot;manda&quot;,&quot;lastName&quot;:&quot;userPoojariPoojari&quot;,&quot;profImgSrc&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPhoto\\/empNumber\\/7&quot;,&quot;hasPassword&quot;:true}\"\n        brand-logo-src=\"/web/images/orange.png?v=1721393199309\"\n        brand-banner-src=\"/web/images/orangehrm-logo.png?v=1721393199309\"\n        logout-url=\"/web/index.php/auth/logout\"\n        support-url=\"/web/index.php/help/support\"\n        :update-password-url=\"&quot;/web/index.php/pim/updatePassword&quot;\"\n        :permissions=\"{&quot;dashboard_subunit_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_location_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_leave_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_time_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_employees_on_leave_today_config&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:true,&quot;canDelete&quot;:false},&quot;dashboard_buzz_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false}}\"\n        :breadcrumb=\"{&quot;moduleName&quot;:&quot;Dashboard&quot;,&quot;level&quot;:null}\"\n        :date-format=\"{&quot;id&quot;:&quot;Y-d-m&quot;,&quot;label&quot;:&quot;yyyy-dd-mm&quot;}\"\n        help-url=\"/web/index.php/help/help?label=dashboard_index\"\n        :show-upgrade=\"1\"\n    >\n                <view-dashboard\n            >\n    </view-dashboard>\n                <template v-slot:footer>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                        <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                    </oxd-text>\n                    <br>\n                </template>\n            </oxd-layout>\n        </div>\n        <script type=\"text/javascript\">\n      window.appGlobal = {\n        baseUrl: \"/web/index.php\",\n        publicPath: \"/web\",\n      };\n  </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "CP-10 Ver historial de permisos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CP-09 Solicitar permiso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CP-06 Restablecer contraseña",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 1) Validar status 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"// 2) Validar que el body incluya 'data.userName' igual a 'Admin'\r",
+									"pm.test(\"Body incluye data.userName igual a 'Admin'\", function () {\r",
+									"    var jsonData = {};\r",
+									"    try {\r",
+									"        jsonData = pm.response.json();\r",
+									"    } catch (e) {\r",
+									"        pm.expect.fail(\"La respuesta no es un JSON válido\");\r",
+									"    }\r",
+									"    pm.expect(jsonData).to.have.property('data');\r",
+									"    pm.expect(jsonData.data).to.have.property('userName', 'Admin');\r",
+									"});\r",
+									"\r",
+									"// 3) Validar que el body incluya 'data.status' igual a true\r",
+									"pm.test(\"Body incluye data.status igual a true\", function () {\r",
+									"    var jsonData = {};\r",
+									"    try {\r",
+									"        jsonData = pm.response.json();\r",
+									"    } catch (e) {\r",
+									"        pm.expect.fail(\"La respuesta no es un JSON válido\");\r",
+									"    }\r",
+									"    pm.expect(jsonData).to.have.property('data');\r",
+									"    pm.expect(jsonData.data).to.have.property('status', true);\r",
+									"});\r",
+									"\r",
+									"// 4) Reportar claramente si la respuesta es diferente (error 400, 401, etc.)\r",
+									"pm.test(\"Respuesta con error es reportada claramente\", function () {\r",
+									"    if (pm.response.code !== 200) {\r",
+									"        pm.expect.fail(`Respuesta con error: código ${pm.response.code}. Body: ${pm.response.text()}`);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{SESSION_COOKIE}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\": \"{{ADMIN_PWD}}\",\r\n    \"newPassword\": \"admin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/update-password",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"api",
+								"v2",
+								"pim",
+								"update-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"currentPassword\": \"{{ADMIN_PWD}}\",\r\n    \"newPassword\": \"admin123\",\r\n    \"confirmPassword\": \"admin123\",\r\n    \"_token\": \"{{CSRF_TOKEN}}\"\r\n}",
+									"options": {
+										"raw": "json"
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/update-password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"update-password"
+									]
+								}
+							},
+							"status": "Unprocessable Content",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:01:05 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"status\": \"422\",\n        \"message\": \"Invalid Parameter\",\n        \"data\": {\n            \"invalidParamKeys\": [\n                \"confirmPassword\",\n                \"_token\"\n            ]\n        }\n    }\n}"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"currentPassword\": \"{{ADMIN_PWD}}\",\r\n    \"newPassword\": \"admin123\"\r\n}",
+									"options": {
+										"raw": "json"
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/update-password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"update-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:04:56 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"userName\": \"Admin\",\n        \"deleted\": false,\n        \"status\": true,\n        \"employee\": {\n            \"empNumber\": 7,\n            \"employeeId\": \"234234\",\n            \"firstName\": \"nainika\",\n            \"middleName\": \"tester\",\n            \"lastName\": \"joseph\",\n            \"terminationId\": null\n        },\n        \"userRole\": {\n            \"id\": 1,\n            \"name\": \"Admin\",\n            \"displayName\": \"Admin\"\n        }\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "CP-07 Obtener perfil de usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 1) Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 2) Response body contains 'data' key",
+									"pm.test(\"Response body contains 'data' key\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"// 3) Main fields in 'data' exist and are not null",
+									"pm.test(\"Main fields in 'data' exist and are not null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var data = jsonData.data;",
+									"    pm.expect(data).to.have.property('empNumber').and.not.eql(null);",
+									"    pm.expect(data).to.have.property('lastName').and.not.eql(null);",
+									"    pm.expect(data).to.have.property('firstName').and.not.eql(null);",
+									"    pm.expect(data).to.have.property('employeeId').and.not.eql(null);",
+									"    pm.expect(data).to.have.property('birthday').and.not.eql(null);",
+									"});",
+									"",
+									"// 4) empNumber is 7 or matches param1 if defined",
+									"pm.test(\"empNumber is 7 or matches param1 if defined\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var data = jsonData.data;",
+									"    var param1 = pm.environment.get('param1');",
+									"    if (param1 !== undefined && param1 !== \"\") {",
+									"        pm.expect(data.empNumber).to.eql(Number(param1));",
+									"    } else {",
+									"        pm.expect(data.empNumber).to.eql(7);",
+									"    }",
+									"});",
+									"",
+									"// 5) gender is a number",
+									"pm.test(\"gender is a number\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var data = jsonData.data;",
+									"    pm.expect(data).to.have.property('gender');",
+									"    pm.expect(data.gender).to.be.a('number');",
+									"});",
+									"",
+									"// 6) birthday has format YYYY-MM-DD",
+									"pm.test(\"birthday has format YYYY-MM-DD\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var data = jsonData.data;",
+									"    pm.expect(data).to.have.property('birthday');",
+									"    pm.expect(data.birthday).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"api",
+								"v2",
+								"pim",
+								"employees",
+								"{{param1}}",
+								"personal-details"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees",
+										"{{param1}}",
+										"personal-details"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 16:18:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"empNumber\": 7,\n        \"lastName\": \"Tester\",\n        \"firstName\": \"ram\",\n        \"middleName\": \"sharma\",\n        \"employeeId\": \"orange\",\n        \"otherId\": \"8\",\n        \"drivingLicenseNo\": \"mm00\",\n        \"drivingLicenseExpiredDate\": \"2023-01-08\",\n        \"gender\": 1,\n        \"maritalStatus\": \"\",\n        \"birthday\": \"2010-11-13\",\n        \"terminationId\": null,\n        \"nationality\": {\n            \"id\": null,\n            \"name\": null\n        }\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/pim/employees/{{param1}}/personal-details",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"pim",
+										"employees",
+										"{{param1}}",
+										"personal-details"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 16:19:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"empNumber\": 7,\n        \"lastName\": \"Tester\",\n        \"firstName\": \"ram\",\n        \"middleName\": \"sharma\",\n        \"employeeId\": \"orange\",\n        \"otherId\": \"8\",\n        \"drivingLicenseNo\": \"mm00\",\n        \"drivingLicenseExpiredDate\": \"2023-01-08\",\n        \"gender\": 1,\n        \"maritalStatus\": \"\",\n        \"birthday\": \"2010-11-13\",\n        \"terminationId\": null,\n        \"nationality\": {\n            \"id\": null,\n            \"name\": null\n        }\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Comentar en publicaciones (Buzz)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar formato en datos exportados",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar empleados por ubicación",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar métricas de empleados activos vs inactivos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CP-01 Login con credenciales validas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const errorMessages = [",
+									"    'Invalid credentials',",
+									"    'Login failed',",
+									"    'Invalid username or password',",
+									"    'Usuario o contraseña incorrectos'",
+									"];",
+									"",
+									"const responseBody = pm.response.text();",
+									"const foundError = errorMessages.some(msg => responseBody.includes(msg));",
+									"",
+									"pm.test('Login should be successful', function () {",
+									"    pm.expect(foundError).to.be.false;",
+									"});",
+									"",
+									"pm.test('Login failed message should not appear', function () {",
+									"    pm.expect(foundError).to.be.false;",
+									"    if (foundError) {",
+									"        pm.expect.fail('Login failed: Error message detected in response body.');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{SESSION_COOKIE}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{ADMIN_USER}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{ADMIN_PWD}}",
+									"type": "text"
+								},
+								{
+									"key": "_token",
+									"value": "{{CSRF_TOKEN}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"auth",
+								"validate"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{ADMIN_USER}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{ADMIN_PWD}}",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Nov 2025 12:59:03 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#150a01;\n            --oxd-primary-font-color:#d80606;\n            --oxd-secondary-four-color:#050801;\n            --oxd-secondary-font-color:#e90b0b;\n            --oxd-primary-gradient-start-color:#070400;\n            --oxd-primary-gradient-end-color:#0d0400;\n            --oxd-secondary-gradient-start-color:#070400;\n            --oxd-secondary-gradient-end-color:#0d0400;\n            --oxd-primary-one-lighten-5-color:#2d1602;\n            --oxd-primary-one-lighten-30-color:#a75008;\n            --oxd-primary-one-darken-5-color:black;\n            --oxd-primary-one-alpha-10-color:rgba(21, 10, 1, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(21, 10, 1, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(21, 10, 1, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(21, 10, 1, 0.5);\n            --oxd-secondary-four-lighten-5-color:#131f04;\n            --oxd-secondary-four-darken-5-color:black;\n            --oxd-secondary-four-alpha-10-color:rgba(5, 8, 1, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(5, 8, 1, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(5, 8, 1, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(5, 8, 1, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n      We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n    </strong>\n        </noscript>\n        <div id=\"app\">\n            <oxd-layout\n        home-url=\"https://www.orangehrm.com/\"\n        :sidepanel-menu-items=\"[{&quot;id&quot;:1,&quot;name&quot;:&quot;Admin&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/admin\\/viewAdminModule&quot;,&quot;icon&quot;:&quot;admin&quot;},{&quot;id&quot;:30,&quot;name&quot;:&quot;PIM&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPimModule&quot;,&quot;icon&quot;:&quot;pim&quot;},{&quot;id&quot;:41,&quot;name&quot;:&quot;Leave&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/leave\\/viewLeaveModule&quot;,&quot;icon&quot;:&quot;leave&quot;},{&quot;id&quot;:52,&quot;name&quot;:&quot;Time&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/time\\/viewTimeModule&quot;,&quot;icon&quot;:&quot;time&quot;},{&quot;id&quot;:65,&quot;name&quot;:&quot;Recruitment&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/recruitment\\/viewRecruitmentModule&quot;,&quot;icon&quot;:&quot;recruitment&quot;},{&quot;id&quot;:40,&quot;name&quot;:&quot;My Info&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewMyDetails&quot;,&quot;icon&quot;:&quot;myinfo&quot;},{&quot;id&quot;:83,&quot;name&quot;:&quot;Performance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/performance\\/viewPerformanceModule&quot;,&quot;icon&quot;:&quot;performance&quot;},{&quot;id&quot;:82,&quot;name&quot;:&quot;Dashboard&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/dashboard\\/index&quot;,&quot;icon&quot;:&quot;dashboard&quot;,&quot;active&quot;:true},{&quot;id&quot;:93,&quot;name&quot;:&quot;Directory&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/directory\\/viewDirectory&quot;,&quot;icon&quot;:&quot;directory&quot;},{&quot;id&quot;:96,&quot;name&quot;:&quot;Maintenance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/maintenance\\/viewMaintenanceModule&quot;,&quot;icon&quot;:&quot;maintenance&quot;},{&quot;id&quot;:105,&quot;name&quot;:&quot;Claim&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/claim\\/viewClaimModule&quot;,&quot;icon&quot;:&quot;claim&quot;},{&quot;id&quot;:101,&quot;name&quot;:&quot;Buzz&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/buzz\\/viewBuzz&quot;,&quot;icon&quot;:&quot;buzz&quot;}]\"\n        :topbar-menu-items=\"[]\"\n        :user=\"{&quot;firstName&quot;:&quot;manda&quot;,&quot;lastName&quot;:&quot;userPoojariPoojari&quot;,&quot;profImgSrc&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPhoto\\/empNumber\\/7&quot;,&quot;hasPassword&quot;:true}\"\n        brand-logo-src=\"/web/images/orange.png?v=1721393199309\"\n        brand-banner-src=\"/web/images/orangehrm-logo.png?v=1721393199309\"\n        logout-url=\"/web/index.php/auth/logout\"\n        support-url=\"/web/index.php/help/support\"\n        :update-password-url=\"&quot;/web/index.php/pim/updatePassword&quot;\"\n        :permissions=\"{&quot;dashboard_subunit_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_location_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_leave_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_time_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_employees_on_leave_today_config&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:true,&quot;canDelete&quot;:false},&quot;dashboard_buzz_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false}}\"\n        :breadcrumb=\"{&quot;moduleName&quot;:&quot;Dashboard&quot;,&quot;level&quot;:null}\"\n        :date-format=\"{&quot;id&quot;:&quot;Y-d-m&quot;,&quot;label&quot;:&quot;yyyy-dd-mm&quot;}\"\n        help-url=\"/web/index.php/help/help?label=dashboard_index\"\n        :show-upgrade=\"1\"\n    >\n                <view-dashboard\n            >\n    </view-dashboard>\n                <template v-slot:footer>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                        <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                    </oxd-text>\n                    <br>\n                </template>\n            </oxd-layout>\n        </div>\n        <script type=\"text/javascript\">\n      window.appGlobal = {\n        baseUrl: \"/web/index.php\",\n        publicPath: \"/web\",\n      };\n  </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{ADMIN_USER}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{ADMIN_PWD}}",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Nov 2025 13:01:32 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#150a01;\n            --oxd-primary-font-color:#d80606;\n            --oxd-secondary-four-color:#050801;\n            --oxd-secondary-font-color:#e90b0b;\n            --oxd-primary-gradient-start-color:#070400;\n            --oxd-primary-gradient-end-color:#0d0400;\n            --oxd-secondary-gradient-start-color:#070400;\n            --oxd-secondary-gradient-end-color:#0d0400;\n            --oxd-primary-one-lighten-5-color:#2d1602;\n            --oxd-primary-one-lighten-30-color:#a75008;\n            --oxd-primary-one-darken-5-color:black;\n            --oxd-primary-one-alpha-10-color:rgba(21, 10, 1, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(21, 10, 1, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(21, 10, 1, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(21, 10, 1, 0.5);\n            --oxd-secondary-four-lighten-5-color:#131f04;\n            --oxd-secondary-four-darken-5-color:black;\n            --oxd-secondary-four-alpha-10-color:rgba(5, 8, 1, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(5, 8, 1, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(5, 8, 1, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(5, 8, 1, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n      We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n    </strong>\n        </noscript>\n        <div id=\"app\">\n            <oxd-layout\n        home-url=\"https://www.orangehrm.com/\"\n        :sidepanel-menu-items=\"[{&quot;id&quot;:1,&quot;name&quot;:&quot;Admin&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/admin\\/viewAdminModule&quot;,&quot;icon&quot;:&quot;admin&quot;},{&quot;id&quot;:30,&quot;name&quot;:&quot;PIM&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPimModule&quot;,&quot;icon&quot;:&quot;pim&quot;},{&quot;id&quot;:41,&quot;name&quot;:&quot;Leave&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/leave\\/viewLeaveModule&quot;,&quot;icon&quot;:&quot;leave&quot;},{&quot;id&quot;:52,&quot;name&quot;:&quot;Time&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/time\\/viewTimeModule&quot;,&quot;icon&quot;:&quot;time&quot;},{&quot;id&quot;:65,&quot;name&quot;:&quot;Recruitment&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/recruitment\\/viewRecruitmentModule&quot;,&quot;icon&quot;:&quot;recruitment&quot;},{&quot;id&quot;:40,&quot;name&quot;:&quot;My Info&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewMyDetails&quot;,&quot;icon&quot;:&quot;myinfo&quot;},{&quot;id&quot;:83,&quot;name&quot;:&quot;Performance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/performance\\/viewPerformanceModule&quot;,&quot;icon&quot;:&quot;performance&quot;},{&quot;id&quot;:82,&quot;name&quot;:&quot;Dashboard&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/dashboard\\/index&quot;,&quot;icon&quot;:&quot;dashboard&quot;,&quot;active&quot;:true},{&quot;id&quot;:93,&quot;name&quot;:&quot;Directory&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/directory\\/viewDirectory&quot;,&quot;icon&quot;:&quot;directory&quot;},{&quot;id&quot;:96,&quot;name&quot;:&quot;Maintenance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/maintenance\\/viewMaintenanceModule&quot;,&quot;icon&quot;:&quot;maintenance&quot;},{&quot;id&quot;:105,&quot;name&quot;:&quot;Claim&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/claim\\/viewClaimModule&quot;,&quot;icon&quot;:&quot;claim&quot;},{&quot;id&quot;:101,&quot;name&quot;:&quot;Buzz&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/buzz\\/viewBuzz&quot;,&quot;icon&quot;:&quot;buzz&quot;}]\"\n        :topbar-menu-items=\"[]\"\n        :user=\"{&quot;firstName&quot;:&quot;manda&quot;,&quot;lastName&quot;:&quot;userPoojariPoojari&quot;,&quot;profImgSrc&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPhoto\\/empNumber\\/7&quot;,&quot;hasPassword&quot;:true}\"\n        brand-logo-src=\"/web/images/orange.png?v=1721393199309\"\n        brand-banner-src=\"/web/images/orangehrm-logo.png?v=1721393199309\"\n        logout-url=\"/web/index.php/auth/logout\"\n        support-url=\"/web/index.php/help/support\"\n        :update-password-url=\"&quot;/web/index.php/pim/updatePassword&quot;\"\n        :permissions=\"{&quot;dashboard_subunit_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_location_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_leave_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_time_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_employees_on_leave_today_config&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:true,&quot;canDelete&quot;:false},&quot;dashboard_buzz_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false}}\"\n        :breadcrumb=\"{&quot;moduleName&quot;:&quot;Dashboard&quot;,&quot;level&quot;:null}\"\n        :date-format=\"{&quot;id&quot;:&quot;Y-d-m&quot;,&quot;label&quot;:&quot;yyyy-dd-mm&quot;}\"\n        help-url=\"/web/index.php/help/help?label=dashboard_index\"\n        :show-upgrade=\"1\"\n    >\n                <view-dashboard\n            >\n    </view-dashboard>\n                <template v-slot:footer>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                        <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                    </oxd-text>\n                    <br>\n                </template>\n            </oxd-layout>\n        </div>\n        <script type=\"text/javascript\">\n      window.appGlobal = {\n        baseUrl: \"/web/index.php\",\n        publicPath: \"/web\",\n      };\n  </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						},
+						{
+							"name": "test3",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "{{SESSION_COOKIE}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{ADMIN_USER}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{ADMIN_PWD}}",
+											"type": "text"
+										},
+										{
+											"key": "_token",
+											"value": "{{CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/auth/validate",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"auth",
+										"validate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Nov 2025 05:32:02 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n        <title>OrangeHRM</title>\n        <link rel=\"icon\" href=\"/web/dist/favicon.ico?v=1721393199309\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"preload\" as=\"style\">\n        <link href=\"/web/dist/js/chunk-vendors.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/js/app.js?v=1721393199309\" rel=\"preload\" as=\"script\">\n        <link href=\"/web/dist/css/chunk-vendors.css?v=1721393199309\" rel=\"stylesheet\"/>\n        <link href=\"/web/dist/css/app.css?v=1721393199309\" rel=\"stylesheet\"/>\n    </head>\n    <body>\n        <style>\n    :root {\n            --oxd-primary-one-color:#FF7B1D;\n            --oxd-primary-font-color:#FFFFFF;\n            --oxd-secondary-four-color:#76BC21;\n            --oxd-secondary-font-color:#FFFFFF;\n            --oxd-primary-gradient-start-color:#FF920B;\n            --oxd-primary-gradient-end-color:#F35C17;\n            --oxd-secondary-gradient-start-color:#FF920B;\n            --oxd-secondary-gradient-end-color:#F35C17;\n            --oxd-primary-one-lighten-5-color:#ff8a37;\n            --oxd-primary-one-lighten-30-color:#ffd4b6;\n            --oxd-primary-one-darken-5-color:#ff6c03;\n            --oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);\n            --oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);\n            --oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);\n            --oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);\n            --oxd-secondary-four-lighten-5-color:#84d225;\n            --oxd-secondary-four-darken-5-color:#68a61d;\n            --oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);\n            --oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);\n            --oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);\n            --oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);\n        }\n  </style>\n        <noscript>\n            <strong>\n      We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue.\n    </strong>\n        </noscript>\n        <div id=\"app\">\n            <oxd-layout\n        home-url=\"https://www.orangehrm.com/\"\n        :sidepanel-menu-items=\"[{&quot;id&quot;:1,&quot;name&quot;:&quot;Admin&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/admin\\/viewAdminModule&quot;,&quot;icon&quot;:&quot;admin&quot;},{&quot;id&quot;:30,&quot;name&quot;:&quot;PIM&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPimModule&quot;,&quot;icon&quot;:&quot;pim&quot;},{&quot;id&quot;:41,&quot;name&quot;:&quot;Leave&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/leave\\/viewLeaveModule&quot;,&quot;icon&quot;:&quot;leave&quot;},{&quot;id&quot;:52,&quot;name&quot;:&quot;Time&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/time\\/viewTimeModule&quot;,&quot;icon&quot;:&quot;time&quot;},{&quot;id&quot;:65,&quot;name&quot;:&quot;Recruitment&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/recruitment\\/viewRecruitmentModule&quot;,&quot;icon&quot;:&quot;recruitment&quot;},{&quot;id&quot;:40,&quot;name&quot;:&quot;My Info&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/pim\\/viewMyDetails&quot;,&quot;icon&quot;:&quot;myinfo&quot;},{&quot;id&quot;:83,&quot;name&quot;:&quot;Performance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/performance\\/viewPerformanceModule&quot;,&quot;icon&quot;:&quot;performance&quot;},{&quot;id&quot;:82,&quot;name&quot;:&quot;Dashboard&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/dashboard\\/index&quot;,&quot;icon&quot;:&quot;dashboard&quot;,&quot;active&quot;:true},{&quot;id&quot;:93,&quot;name&quot;:&quot;Directory&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/directory\\/viewDirectory&quot;,&quot;icon&quot;:&quot;directory&quot;},{&quot;id&quot;:96,&quot;name&quot;:&quot;Maintenance&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/maintenance\\/viewMaintenanceModule&quot;,&quot;icon&quot;:&quot;maintenance&quot;},{&quot;id&quot;:105,&quot;name&quot;:&quot;Claim&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/claim\\/viewClaimModule&quot;,&quot;icon&quot;:&quot;claim&quot;},{&quot;id&quot;:101,&quot;name&quot;:&quot;Buzz&quot;,&quot;url&quot;:&quot;\\/web\\/index.php\\/buzz\\/viewBuzz&quot;,&quot;icon&quot;:&quot;buzz&quot;}]\"\n        :topbar-menu-items=\"[]\"\n        :user=\"{&quot;firstName&quot;:&quot;nainika&quot;,&quot;lastName&quot;:&quot;joseph&quot;,&quot;profImgSrc&quot;:&quot;\\/web\\/index.php\\/pim\\/viewPhoto\\/empNumber\\/7&quot;,&quot;hasPassword&quot;:true}\"\n        brand-logo-src=\"/web/images/orange.png?v=1721393199309\"\n        brand-banner-src=\"/web/images/orangehrm-logo.png?v=1721393199309\"\n        logout-url=\"/web/index.php/auth/logout\"\n        support-url=\"/web/index.php/help/support\"\n        :update-password-url=\"&quot;/web/index.php/pim/updatePassword&quot;\"\n        :permissions=\"{&quot;dashboard_subunit_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_location_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_leave_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_time_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false},&quot;dashboard_employees_on_leave_today_config&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:true,&quot;canDelete&quot;:false},&quot;dashboard_buzz_widget&quot;:{&quot;canRead&quot;:true,&quot;canCreate&quot;:false,&quot;canUpdate&quot;:false,&quot;canDelete&quot;:false}}\"\n        :breadcrumb=\"{&quot;moduleName&quot;:&quot;Dashboard&quot;,&quot;level&quot;:null}\"\n        :date-format=\"{&quot;id&quot;:&quot;Y-d-m&quot;,&quot;label&quot;:&quot;yyyy-dd-mm&quot;}\"\n        help-url=\"/web/index.php/help/help?label=dashboard_index\"\n        :show-upgrade=\"1\"\n    >\n                <view-dashboard\n            >\n    </view-dashboard>\n                <template v-slot:footer>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.7</oxd-text>\n                    <oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2025 \n                        <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.\n                    </oxd-text>\n                    <br>\n                </template>\n            </oxd-layout>\n        </div>\n        <script type=\"text/javascript\">\n      window.appGlobal = {\n        baseUrl: \"/web/index.php\",\n        publicPath: \"/web\",\n      };\n  </script>\n        <script src=\"/web/dist/js/chunk-vendors.js?v=1721393199309\"></script>\n        <script src=\"/web/dist/js/app.js?v=1721393199309\"></script>\n    </body>\n</html>"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Frontend",
+			"item": [
+				{
+					"name": "Ver botones con iconos representativos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver interfaz correctamente en celular",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver perfil en UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar dashboard correctamente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver favicon y logo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Navegar entre módulos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Automatizable",
+			"item": [
+				{
+					"name": "Comentar publicación en Buzz desde UI",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Exportar datos y validar formato desde UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver historial de permisos en UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar campos de fecha en formularios",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Probar edición de múltiples empleados",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": ""
+		}
+	]
+}
