@@ -911,8 +911,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"// Test: status 200 y extraer token si viene embebido en HTML\r",
-									"pm.test(\"Status is 200\", () => pm.response.to.have.status(200));\r",
+									"// Test: status 200 ok\r",
+									"pm.test(\"Status 200 ok\", () => pm.response.to.have.status(200));\r",
 									"\r",
 									"// Extraer CSRF token embebido en :token del componente auth-login o input hidden _token\r",
 									"try {\r",
@@ -930,11 +930,11 @@
 									"      pm.environment.set(\"CSRF_TOKEN\", alt[1]);\r",
 									"      console.log(\"CSRF_TOKEN set (from hidden input):\", alt[1]);\r",
 									"    } else {\r",
-									"      console.log(\"No token found in :token nor hidden input\");\r",
+									"      console.log(\"NO se encontro un token o esta oculto\");\r",
 									"    }\r",
 									"  }\r",
 									"} catch (e) {\r",
-									"  console.log(\"Error extracting token:\", e);\r",
+									"  console.log(\"Error de extraccion:\", e);\r",
 									"}\r",
 									""
 								],
@@ -1139,23 +1139,28 @@
 							"script": {
 								"exec": [
 									"const errorMessages = [",
-									"    'Invalid credentials',",
-									"    'Login failed',",
-									"    'Invalid username or password',",
-									"    'Usuario o contraseña incorrectos'",
+									"    'Credenciales invalidas',",
+									"    'Login fallido',",
+									"    'Username o password invalidos',",
+									"    'Username o password incorrectos'",
 									"];",
 									"",
 									"const responseBody = pm.response.text();",
 									"const foundError = errorMessages.some(msg => responseBody.includes(msg));",
 									"",
-									"pm.test('Login should be successful', function () {",
+									"// 1) Validar status 200",
+									"pm.test(\"Status 200 ok\", function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});",
+									"",
+									"pm.test('Login exitoso', function () {",
 									"    pm.expect(foundError).to.be.false;",
 									"});",
 									"",
-									"pm.test('Login failed message should not appear', function () {",
+									"pm.test('No aparece mensaje de error', function () {",
 									"    pm.expect(foundError).to.be.false;",
 									"    if (foundError) {",
-									"        pm.expect.fail('Login failed: Error message detected in response body.');",
+									"        pm.expect.fail('Login Fallido: Mensaje de error detectado en el body.');",
 									"    }",
 									"});"
 								],
@@ -1644,16 +1649,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Login inválido: se muestra el dashboard\", function () {",
+									"pm.test(\"Login inválido\", function () {",
 									"    const html = pm.response.text();",
+									"",
 									"    // Buscar el componente <view-dashboard> en el HTML",
 									"    const hasDashboardComponent = /<view-dashboard[\\s>]/i.test(html);",
 									"    pm.expect(hasDashboardComponent, \"No se encontró el componente <view-dashboard> en el HTML del dashboard\").to.be.true;",
-									"    // Alternativamente, buscar otros identificadores típicos del dashboard",
-									"    // Ejemplo: buscar un div con id=\"dashboard\" o clase relacionada",
+									"    // Alternativamente, buscar otros identificadores del dashboard",
 									"    const hasDashboardId = /<div[^>]*id=[\"']dashboard[\"'][^>]*>/i.test(html);",
 									"    const hasDashboardClass = /<div[^>]*class=[\"'][^\"']*dashboard[^\"']*[\"'][^>]*>/i.test(html);",
-									"    pm.expect(hasDashboardId || hasDashboardClass || hasDashboardComponent, \"No se encontró ningún identificador confiable del dashboard en el HTML\").to.be.true;",
+									"    pm.expect(hasDashboardId || hasDashboardClass || hasDashboardComponent, \"No se encontró ningún identificador especifico del dashboard en el HTML\").to.be.true;",
+									"});",
+									"",
+									"// 1) Validar status 200",
+									"pm.test(\"Status 200 ok\", function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
 									"});",
 									""
 								],
@@ -2324,10 +2334,10 @@
 									"pm.test(\"Logout exitoso: contiene <title>OrangeHRM y <auth-login>\", function () {",
 									"    var html = pm.response.text();",
 									"",
-									"    // Validar el título (ignorando espacios y mayúsculas)",
+									"    // Validar el título",
 									"    pm.expect(/<title>\\s*OrangeHRM\\s*<\\/title>/i.test(html)).to.be.true;",
 									"",
-									"    // Validar la presencia del componente auth-login (puede tener atributos)",
+									"    // Validar la presencia del componente auth-login ",
 									"    pm.expect(/<auth-login[\\s>]/i.test(html)).to.be.true;",
 									"});"
 								],
@@ -2630,7 +2640,7 @@
 							"script": {
 								"exec": [
 									"// 1) Validar status 200 o 201\r",
-									"pm.test(\"Status code is 200 o 201\", function () {\r",
+									"pm.test(\"Status 200 ok\", function () {\r",
 									"    pm.expect([200, 201]).to.include(pm.response.code);\r",
 									"});\r",
 									"\r",
@@ -2646,12 +2656,7 @@
 									"    pm.expect(jsonData.data).to.have.property('employeeId');\r",
 									"});\r",
 									"\r",
-									"// 3) Reportar claramente si la respuesta es diferente (error 400, 401, etc.)\r",
-									"pm.test(\"Respuesta con error es reportada claramente\", function () {\r",
-									"    if (![200, 201].includes(pm.response.code)) {\r",
-									"        pm.expect.fail(`Respuesta con error: código ${pm.response.code}. Body: ${pm.response.text()}`);\r",
-									"    }\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {},
@@ -3005,11 +3010,12 @@
 							"script": {
 								"exec": [
 									"// Validar que la respuesta sea exitosa (200 OK)",
-									"pm.test(\"La respuesta debe ser 200 OK\", function () {",
+									"pm.test(\"Status 200 ok\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
+									"",
 									"// Validar que el header Content-Type sea application/json",
-									"pm.test(\"El header Content-Type debe ser application/json\", function () {",
+									"pm.test(\"El header Content-Type es application/json\", function () {",
 									"    pm.response.to.have.header(\"Content-Type\");",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
 									"});"
@@ -3784,19 +3790,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"// 1) Status code is 200",
+									"// 1) Validar status code 200",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"// 2) Response body contains 'data' key",
-									"pm.test(\"Response body contains 'data' key\", function () {",
+									"// 2) Respuesta ene l body contiene el data key",
+									"pm.test(\"Response contiene data key\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('data');",
 									"});",
 									"",
-									"// 3) Main fields in 'data' exist and are not null",
-									"pm.test(\"Main fields in 'data' exist and are not null\", function () {",
+									"// 3) Validar que los campos de data no sean nulos y existan.",
+									"pm.test(\"Los campos de data no son nulos y existen\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    var data = jsonData.data;",
 									"    pm.expect(data).to.have.property('empNumber').and.not.eql(null);",
@@ -3806,8 +3812,8 @@
 									"    pm.expect(data).to.have.property('birthday').and.not.eql(null);",
 									"});",
 									"",
-									"// 4) empNumber is 7 or matches param1 if defined",
-									"pm.test(\"empNumber is 7 or matches param1 if defined\", function () {",
+									"// 4) Validar el id del usuario definido en param1",
+									"pm.test(\"empNumber es 7 y coincide con param1 \", function () {",
 									"    var jsonData = pm.response.json();",
 									"    var data = jsonData.data;",
 									"    var param1 = pm.environment.get('param1');",
@@ -3818,16 +3824,9 @@
 									"    }",
 									"});",
 									"",
-									"// 5) gender is a number",
-									"pm.test(\"gender is a number\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    var data = jsonData.data;",
-									"    pm.expect(data).to.have.property('gender');",
-									"    pm.expect(data.gender).to.be.a('number');",
-									"});",
 									"",
-									"// 6) birthday has format YYYY-MM-DD",
-									"pm.test(\"birthday has format YYYY-MM-DD\", function () {",
+									"// 6) Validar formato de fecha",
+									"pm.test(\"Formato de fecha de birthday es YYYY-MM-DD\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    var data = jsonData.data;",
 									"    pm.expect(data).to.have.property('birthday');",
@@ -4134,7 +4133,7 @@
 							"script": {
 								"exec": [
 									"// Validar que el status code sea 200\r",
-									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.test(\"Status 200 ok\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
@@ -4142,12 +4141,12 @@
 									"let jsonData = pm.response.json();\r",
 									"\r",
 									"// Validar que existe el campo data.post.id y es un número\r",
-									"pm.test(\"data.post.id exists and is a number\", function () {\r",
+									"pm.test(\"El id existe y es un numero\", function () {\r",
 									"    pm.expect(jsonData.data.post.id).to.be.a('number');\r",
 									"});\r",
 									"\r",
 									"// Validar que existe el campo data.employee.firstName y no está vacío\r",
-									"pm.test(\"data.employee.firstName exists and is not empty\", function () {\r",
+									"pm.test(\"El primer nombre existe y no esta nulo o vacio\", function () {\r",
 									"    pm.expect(jsonData.data.employee.firstName).to.exist;\r",
 									"    pm.expect(jsonData.data.employee.firstName).to.not.be.empty;\r",
 									"});"
@@ -4171,12 +4170,9 @@
 							}
 						},
 						"url": {
-							"raw": "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/buzz/posts",
-							"protocol": "https",
+							"raw": "{{BASE_URL}}/web/index.php/api/v2/buzz/posts",
 							"host": [
-								"opensource-demo",
-								"orangehrmlive",
-								"com"
+								"{{BASE_URL}}"
 							],
 							"path": [
 								"web",
@@ -4444,7 +4440,448 @@
 					]
 				},
 				{
-					"name": "Validar formato en datos exportados",
+					"name": "CP-18 Consultar empleados por ubicación",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 1) Validar status code 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 2) Filtrar empleados con ubicación definida",
+									"try {",
+									"    const jsonData = pm.response.json();",
+									"    const empleadosConUbicacion = (jsonData.data || []).filter(emp => emp.location && emp.location.name);",
+									"",
+									"    // 3) Validar que existe al menos un empleado con ubicación y mostrar detalles",
+									"    pm.test(\"Empleado con ubicación definida encontrado, revisar consola para leer detalles\", function () {",
+									"        pm.expect(empleadosConUbicacion.length, \"No se encontraron empleados con ubicación definida\").to.be.above(0);",
+									"        if (empleadosConUbicacion.length > 0) {",
+									"            const ubicacion = empleadosConUbicacion[0].location.name;",
+									"            pm.expect(true, `Nombre de la ubicación: ${ubicacion}`).to.be.true;",
+									"        }",
+									"    });",
+									"",
+									"    if (empleadosConUbicacion.length > 0) {",
+									"        // Mostrar en consola",
+									"        console.log(\"Empleados con ubicación definida:\", empleadosConUbicacion);",
+									"",
+									"        // Guardar el primer empleado con ubicación en variable de entorno",
+									"        pm.environment.set(\"EMPLOYEE_WITH_LOCATION\", JSON.stringify(empleadosConUbicacion[0]));",
+									"    }",
+									"} catch (e) {",
+									"    pm.test(\"La respuesta no es JSON válido\", function () {",
+									"        pm.expect.fail(\"La respuesta no es JSON válido: \" + e.message);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/web/index.php/api/v2/directory/employees?limit=14&offset=0",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"web",
+								"index.php",
+								"api",
+								"v2",
+								"directory",
+								"employees"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "14"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "test1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/directory/employees?limit=14&offset=0",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"directory",
+										"employees"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "14"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 Dec 2025 03:56:51 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"empNumber\": 104,\n            \"lastName\": \"010Z\",\n            \"firstName\": \"A8DCo\",\n            \"middleName\": \"4Ys\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 128,\n            \"lastName\": \"444444\",\n            \"firstName\": \"123445\",\n            \"middleName\": \"34\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 86,\n            \"lastName\": \"5TlV\",\n            \"firstName\": \"99N75\",\n            \"middleName\": \"425\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 136,\n            \"lastName\": \"90jsnd\",\n            \"firstName\": \"yedghjb1\",\n            \"middleName\": \"ru84\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 69,\n            \"lastName\": \"Akunuri\",\n            \"firstName\": \"Ranga\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 95,\n            \"lastName\": \"Amiano\",\n            \"firstName\": \"Timothy\",\n            \"middleName\": \"Lewis\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 3,\n            \"lastName\": \"Anderson\",\n            \"firstName\": \"Peter\",\n            \"middleName\": \"Mac\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": 2,\n                \"title\": \"Chief Financial Officer\",\n                \"isDeleted\": false\n            },\n            \"subunit\": {\n                \"id\": 2,\n                \"name\": \"Administration\"\n            },\n            \"location\": {\n                \"id\": 2,\n                \"name\": \"New York Sales Office\"\n            }\n        },\n        {\n            \"empNumber\": 177,\n            \"lastName\": \"Automation\",\n            \"firstName\": \"Test230651\",\n            \"middleName\": \"User\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 46,\n            \"lastName\": \"B\",\n            \"firstName\": \"Ravi\",\n            \"middleName\": \"M\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 217,\n            \"lastName\": \"Bahringer\",\n            \"firstName\": \"Fatima\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 205,\n            \"lastName\": \"Balistreri\",\n            \"firstName\": \"Sadie\",\n            \"middleName\": \"Jerrie Leffler Hermann\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 192,\n            \"lastName\": \"Bartoletti\",\n            \"firstName\": \"Betsey\",\n            \"middleName\": \"Velvet Corwin Lehner DDS\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 171,\n            \"lastName\": \"Bashirian\",\n            \"firstName\": \"Grayce\",\n            \"middleName\": \"Reese\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 188,\n            \"lastName\": \"Becker\",\n            \"firstName\": \"Ralph\",\n            \"middleName\": \"Bud Corkery Donnelly Jr.\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 181\n    },\n    \"rels\": []\n}"
+						},
+						{
+							"name": "test2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/directory/employees?limit=14&offset=0",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"directory",
+										"employees"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "14"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 Dec 2025 04:14:42 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"empNumber\": 104,\n            \"lastName\": \"010Z\",\n            \"firstName\": \"A8DCo\",\n            \"middleName\": \"4Ys\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 128,\n            \"lastName\": \"444444\",\n            \"firstName\": \"123445\",\n            \"middleName\": \"34\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 86,\n            \"lastName\": \"5TlV\",\n            \"firstName\": \"99N75\",\n            \"middleName\": \"425\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 136,\n            \"lastName\": \"90jsnd\",\n            \"firstName\": \"yedghjb1\",\n            \"middleName\": \"ru84\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 69,\n            \"lastName\": \"Akunuri\",\n            \"firstName\": \"Ranga\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 95,\n            \"lastName\": \"Amiano\",\n            \"firstName\": \"Timothy\",\n            \"middleName\": \"Lewis\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 3,\n            \"lastName\": \"Anderson\",\n            \"firstName\": \"Peter\",\n            \"middleName\": \"Mac\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": 2,\n                \"title\": \"Chief Financial Officer\",\n                \"isDeleted\": false\n            },\n            \"subunit\": {\n                \"id\": 2,\n                \"name\": \"Administration\"\n            },\n            \"location\": {\n                \"id\": 2,\n                \"name\": \"New York Sales Office\"\n            }\n        },\n        {\n            \"empNumber\": 46,\n            \"lastName\": \"B\",\n            \"firstName\": \"Ravi\",\n            \"middleName\": \"M\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 166,\n            \"lastName\": \"Benny\",\n            \"firstName\": \"Thomas\",\n            \"middleName\": \"Kutty\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 116,\n            \"lastName\": \"Brown\",\n            \"firstName\": \"Amelia\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 160,\n            \"lastName\": \"Butler\",\n            \"firstName\": \"James\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 113,\n            \"lastName\": \"Carter\",\n            \"firstName\": \"Charles\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 96,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 97,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 98\n    },\n    \"rels\": []\n}"
+						},
+						{
+							"name": "test3",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/directory/employees?limit=14&offset=0",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"directory",
+										"employees"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "14"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 Dec 2025 04:16:33 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"empNumber\": 104,\n            \"lastName\": \"010Z\",\n            \"firstName\": \"A8DCo\",\n            \"middleName\": \"4Ys\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 128,\n            \"lastName\": \"444444\",\n            \"firstName\": \"123445\",\n            \"middleName\": \"34\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 86,\n            \"lastName\": \"5TlV\",\n            \"firstName\": \"99N75\",\n            \"middleName\": \"425\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 136,\n            \"lastName\": \"90jsnd\",\n            \"firstName\": \"yedghjb1\",\n            \"middleName\": \"ru84\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 69,\n            \"lastName\": \"Akunuri\",\n            \"firstName\": \"Ranga\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 95,\n            \"lastName\": \"Amiano\",\n            \"firstName\": \"Timothy\",\n            \"middleName\": \"Lewis\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 3,\n            \"lastName\": \"Anderson\",\n            \"firstName\": \"Peter\",\n            \"middleName\": \"Mac\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": 2,\n                \"title\": \"Chief Financial Officer\",\n                \"isDeleted\": false\n            },\n            \"subunit\": {\n                \"id\": 2,\n                \"name\": \"Administration\"\n            },\n            \"location\": {\n                \"id\": 2,\n                \"name\": \"New York Sales Office\"\n            }\n        },\n        {\n            \"empNumber\": 46,\n            \"lastName\": \"B\",\n            \"firstName\": \"Ravi\",\n            \"middleName\": \"M\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 166,\n            \"lastName\": \"Benny\",\n            \"firstName\": \"Thomas\",\n            \"middleName\": \"Kutty\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 116,\n            \"lastName\": \"Brown\",\n            \"firstName\": \"Amelia\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 160,\n            \"lastName\": \"Butler\",\n            \"firstName\": \"James\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 113,\n            \"lastName\": \"Carter\",\n            \"firstName\": \"Charles\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 96,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 97,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 98\n    },\n    \"rels\": []\n}"
+						},
+						{
+							"name": "test4",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/web/index.php/api/v2/directory/employees?limit=14&offset=0",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"web",
+										"index.php",
+										"api",
+										"v2",
+										"directory",
+										"employees"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "14"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 Dec 2025 04:25:50 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubdomains;"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' *.projects-abroad.net fonts.googleapis.com fonts.gstatic.com code.jquery.com maxcdn.bootstrapcdn.com ajax.googleapis.com cdnjs.cloudflare.com native.testing.equest.com www.google.com *.docusign.net www.youtube.com youtu.be player.vimeo.com docs.google.com 'unsafe-inline' 'unsafe-eval' data: font;frame-src 'self' www.youtube.com www.vimeo.com vimeo.com www.yahoo.com www.dailymotion.com www.metacafe.com www.ustream.tv native.testing.equest.com sandbox.e-signlive.com *.orangehrmlive.com *.orangehrm.com *.amazonaws.com;connect-src 'self' *.orangehrm.com *.orangehrmlive.com;worker-src blob: 'self';img-src * 'self' data: blob:"
+								},
+								{
+									"key": "client_max_body_size",
+									"value": "50M"
+								},
+								{
+									"key": "Public-Key-Pins",
+									"value": "pin-sha256=\"Md7QJIL/UMqdHaS73pEkLHm5ofUUE35+r4SYdM014/E=\";pin-sha256=\"blgmjf3Tb3C0sUqb7jo4axiZAnr327fX0ycrUGqjw2k=\";pin-sha256=\"puCdyuZdXoDc5jSdcGKU6mdjd0VNq16yoaO2BcDF36A=\";pin-sha256=\"yQhO6YqQX5Y/NxyHAjXnI3jOtYWUm/TtRr666RunXRg=\"; pin-sha256=\"Slt48iBVTjuRQJTjbzopminRrHSGtndY0/sj0lFf9Qk=\"; max-age=63072000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"empNumber\": 104,\n            \"lastName\": \"010Z\",\n            \"firstName\": \"A8DCo\",\n            \"middleName\": \"4Ys\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 128,\n            \"lastName\": \"444444\",\n            \"firstName\": \"123445\",\n            \"middleName\": \"34\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 86,\n            \"lastName\": \"5TlV\",\n            \"firstName\": \"99N75\",\n            \"middleName\": \"425\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 136,\n            \"lastName\": \"90jsnd\",\n            \"firstName\": \"yedghjb1\",\n            \"middleName\": \"ru84\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 69,\n            \"lastName\": \"Akunuri\",\n            \"firstName\": \"Ranga\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 95,\n            \"lastName\": \"Amiano\",\n            \"firstName\": \"Timothy\",\n            \"middleName\": \"Lewis\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 3,\n            \"lastName\": \"Anderson\",\n            \"firstName\": \"Peter\",\n            \"middleName\": \"Mac\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": 2,\n                \"title\": \"Chief Financial Officer\",\n                \"isDeleted\": false\n            },\n            \"subunit\": {\n                \"id\": 2,\n                \"name\": \"Administration\"\n            },\n            \"location\": {\n                \"id\": 2,\n                \"name\": \"New York Sales Office\"\n            }\n        },\n        {\n            \"empNumber\": 46,\n            \"lastName\": \"B\",\n            \"firstName\": \"Ravi\",\n            \"middleName\": \"M\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 166,\n            \"lastName\": \"Benny\",\n            \"firstName\": \"Thomas\",\n            \"middleName\": \"Kutty\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 116,\n            \"lastName\": \"Brown\",\n            \"firstName\": \"Amelia\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 160,\n            \"lastName\": \"Butler\",\n            \"firstName\": \"James\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 113,\n            \"lastName\": \"Carter\",\n            \"firstName\": \"Charles\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 96,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 97,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 101\n    },\n    \"rels\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "CP-19 Consultar métricas de empleados activos vs inactivos",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -4458,185 +4895,7 @@
 					"response": []
 				},
 				{
-					"name": "Consultar empleados por ubicación",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar métricas de empleados activos vs inactivos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Frontend",
-			"item": [
-				{
-					"name": "Ver botones con iconos representativos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Ver interfaz correctamente en celular",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Ver perfil en UI",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Mostrar dashboard correctamente",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Ver favicon y logo",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Navegar entre módulos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Automatizable",
-			"item": [
-				{
-					"name": "Comentar publicación en Buzz desde UI",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Exportar datos y validar formato desde UI",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Ver historial de permisos en UI",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Validar campos de fecha en formularios",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Probar edición de múltiples empleados",
+					"name": "CP-20 Probar edición de múltiples empleados",
 					"request": {
 						"method": "PUT",
 						"header": [],
