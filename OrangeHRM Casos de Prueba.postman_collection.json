@@ -20,19 +20,33 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Status code is 200\", function () {",
+											"pm.test(\"Status 200 ok\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
 											"const jsonData = pm.response.json();",
-											"pm.test(\"Response has 'data' property\", function () {",
+											"pm.test(\"Respuesta contiene 'data' como una de sus propiedades\", function () {",
 											"    pm.expect(jsonData).to.have.property('data');",
 											"    pm.expect(jsonData.data).to.be.an('array');",
 											"});",
-											"pm.test(\"Response has 'meta' property (object)\", function () {",
+											"pm.test(\"Respuesta contiene 'meta' como una de sus propiedades\", function () {",
 											"    pm.expect(jsonData).to.have.property('meta');",
 											"    pm.expect(jsonData.meta).to.be.an('object');",
-											"});"
+											"});",
+											"",
+											"// Buscar el ID de la ubicación 'New York Sales Office' y guardarlo en variable de entorno LOCATION_ID",
+											"const nyLocation = (jsonData.data || []).find(item => item.location && item.location.name === \"New York Sales Office\");",
+											"if (nyLocation && nyLocation.location && nyLocation.location.id) {",
+											"    pm.environment.set(\"LOCATION_ID\", nyLocation.location.id);",
+											"    pm.test(\"Se encontró el ID de 'New York Sales Office' y se guardó en LOCATION_ID\", function () {",
+											"        pm.expect(pm.environment.get(\"LOCATION_ID\")).to.eql(nyLocation.location.id);",
+											"    });",
+											"} else {",
+											"    pm.environment.unset(\"LOCATION_ID\");",
+											"    pm.test(\"No se encontró la ubicación 'New York Sales Office'\", function () {",
+											"        pm.expect.fail(\"No se encontró la ubicación 'New York Sales Office'\");",
+											"    });",
+											"}"
 										],
 										"type": "text/javascript",
 										"packages": {},
@@ -145,19 +159,22 @@
 								{
 									"listen": "test",
 									"script": {
-										"type": "text/javascript",
 										"exec": [
-											"// Dashboard - Shortcuts",
-											"pm.test(\"La respuesta tiene status 200\", function () {",
+											"// Validar status code 200 ok",
+											"pm.test(\"Status 200 ok\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"'data' es un objeto\", function () {",
+											"//validar contenido de 'data'",
+											"pm.test(\"Respuesta contiene 'data' como una de sus propiedades\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData).to.have.property('data');",
 											"    pm.expect(jsonData.data).to.be.an('object');",
 											"});"
-										]
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
 									}
 								}
 							],
@@ -264,15 +281,14 @@
 								{
 									"listen": "test",
 									"script": {
-										"type": "text/javascript",
 										"exec": [
-											"// Test: 'data' is an array and each element has the required structure",
-											"pm.test(\"'data' is an array\", function () {",
+											"// Validar la estructura de 'data'",
+											"pm.test(\"Respuesta contiene 'data' como una de sus propiedades y es un array\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData).to.have.property('data').that.is.an('array');",
 											"});",
 											"",
-											"pm.test(\"Each element in 'data' has 'workDay' and 'totalTime' with correct structure\", function () {",
+											"pm.test(\"Cada elemento en 'data' tiene 'workDay' y 'totalTime' con la estructura esperada\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    jsonData.data.forEach(function(item) {",
 											"        pm.expect(item).to.have.property('workDay').that.is.an('object');",
@@ -281,7 +297,10 @@
 											"        pm.expect(item.totalTime).to.have.all.keys('hours', 'minutes');",
 											"    });",
 											"});"
-										]
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
 									}
 								}
 							],
@@ -391,16 +410,20 @@
 									"listen": "test",
 									"script": {
 										"exec": [
+											"//Validar que el status code sea 200.",
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
+											"//Validar que la respuesta contenga la propiedad 'data' y que sea un array.",
 											"const jsonData = pm.response.json();",
-											"pm.test(\"Response has 'data' property \", function () {",
+											"pm.test(\"Respuesta contiene 'data' como una de sus propiedades\", function () {",
 											"    pm.expect(jsonData).to.have.property('data');",
 											"    pm.expect(jsonData.data).to.be.an('array');",
 											"});",
-											"pm.test(\"Response has 'meta' property (object) with 'leavePeriodDefined'\", function () {",
+											"",
+											"//Validar la respuesta contenga la propiedad 'meta' y que esta contenga la propiedad 'leavePeriodDefined'.",
+											"pm.test(\"Respuesta contiene 'meta' como una de sus propiedades y esta contiene 'leavePeriodDefined'\", function () {",
 											"    pm.expect(jsonData).to.have.property('meta');",
 											"    pm.expect(jsonData.meta).to.be.an('object');",
 											"    pm.expect(jsonData.meta).to.have.property('leavePeriodDefined');",
@@ -529,15 +552,15 @@
 								{
 									"listen": "test",
 									"script": {
-										"type": "text/javascript",
 										"exec": [
-											"// Test: 'data' is an array and each element has the required properties",
-											"pm.test(\"'data' is an array\", function () {",
+											"// Validar la estructura de 'data'",
+											"pm.test(\"Respuesta contiene 'data' como una de sus propiedades y es un array\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData).to.have.property('data').that.is.an('array');",
 											"});",
 											"",
-											"pm.test(\"Each element in 'data' has 'id', 'group', and 'pendingActionCount'\", function () {",
+											"//Validar estructura de 'data'",
+											"pm.test(\"Cada elemento en 'data' tiene 'id', 'group' y 'pendingActionCount'\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    jsonData.data.forEach(function(item) {",
 											"        pm.expect(item).to.have.property('id');",
@@ -545,7 +568,10 @@
 											"        pm.expect(item).to.have.property('pendingActionCount');",
 											"    });",
 											"});"
-										]
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
 									}
 								}
 							],
@@ -654,13 +680,13 @@
 								{
 									"listen": "test",
 									"script": {
-										"type": "text/javascript",
 										"exec": [
-											"// Dashboard - Subunit",
+											"// Validar que la respuesta tenga un status 200.",
 											"pm.test(\"La respuesta tiene status 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
+											"//Validar esttructura de 'data'",
 											"pm.test(\"Cada elemento de 'data' tiene una propiedad 'subunit' con 'id'\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData).to.have.property('data');",
@@ -671,7 +697,10 @@
 											"        pm.expect(item.subunit).to.have.property('id');",
 											"    });",
 											"});"
-										]
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
 									}
 								}
 							],
@@ -781,11 +810,14 @@
 									"listen": "test",
 									"script": {
 										"exec": [
+											"//Validar que el estado de la respuesta sea 200.",
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
-											"const jsonData = pm.response.json();",
+											"const jsonData = pm.response.json(); ",
+											"",
+											"//Validar que la respuesta contenga 'data' ",
 											"pm.test(\"Response has 'data' property\", function () {",
 											"    pm.expect(jsonData).to.have.property('data');",
 											"    pm.expect(jsonData.data).to.be.an('array');",
@@ -1649,18 +1681,6 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Login inválido\", function () {",
-									"    const html = pm.response.text();",
-									"",
-									"    // Buscar el componente <view-dashboard> en el HTML",
-									"    const hasDashboardComponent = /<view-dashboard[\\s>]/i.test(html);",
-									"    pm.expect(hasDashboardComponent, \"No se encontró el componente <view-dashboard> en el HTML del dashboard\").to.be.true;",
-									"    // Alternativamente, buscar otros identificadores del dashboard",
-									"    const hasDashboardId = /<div[^>]*id=[\"']dashboard[\"'][^>]*>/i.test(html);",
-									"    const hasDashboardClass = /<div[^>]*class=[\"'][^\"']*dashboard[^\"']*[\"'][^>]*>/i.test(html);",
-									"    pm.expect(hasDashboardId || hasDashboardClass || hasDashboardComponent, \"No se encontró ningún identificador especifico del dashboard en el HTML\").to.be.true;",
-									"});",
-									"",
 									"// 1) Validar status 200",
 									"pm.test(\"Status 200 ok\", function () {",
 									"    pm.expect(pm.response.code).to.eql(200);",
@@ -2339,6 +2359,11 @@
 									"",
 									"    // Validar la presencia del componente auth-login ",
 									"    pm.expect(/<auth-login[\\s>]/i.test(html)).to.be.true;",
+									"});",
+									"",
+									"// 1) Validar status 200",
+									"pm.test(\"Status 200 ok\", function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
 									"});"
 								],
 								"type": "text/javascript",
@@ -3433,7 +3458,7 @@
 							"script": {
 								"exec": [
 									"// 1) Validar status 200\r",
-									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.test(\"Status 200 ok\", function () {\r",
 									"    pm.expect(pm.response.code).to.eql(200);\r",
 									"});\r",
 									"\r",
@@ -3462,7 +3487,7 @@
 									"});\r",
 									"\r",
 									"// 4) Reportar claramente si la respuesta es diferente (error 400, 401, etc.)\r",
-									"pm.test(\"Respuesta con error es reportada claramente\", function () {\r",
+									"pm.test(\"No hay codigos de errores encontrados\", function () {\r",
 									"    if (pm.response.code !== 200) {\r",
 									"        pm.expect.fail(`Respuesta con error: código ${pm.response.code}. Body: ${pm.response.text()}`);\r",
 									"    }\r",
@@ -3795,8 +3820,8 @@
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"// 2) Respuesta ene l body contiene el data key",
-									"pm.test(\"Response contiene data key\", function () {",
+									"// 2) Respuesta ene l body contiene 'data'",
+									"pm.test(\"Response contiene 'data'\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('data');",
 									"});",
@@ -4096,34 +4121,6 @@
 							"body": "{\n    \"data\": {\n        \"empNumber\": 7,\n        \"lastName\": \"tester2\",\n        \"firstName\": \"LEONARDO2\",\n        \"middleName\": \"test5\",\n        \"employeeId\": \"6969\",\n        \"otherId\": \"ID1\",\n        \"drivingLicenseNo\": \"EBHPA66779\",\n        \"drivingLicenseExpiredDate\": \"2024-09-09\",\n        \"gender\": 1,\n        \"maritalStatus\": \"Other\",\n        \"birthday\": \"2024-09-07\",\n        \"terminationId\": null,\n        \"nationality\": {\n            \"id\": 82,\n            \"name\": \"Indian\"\n        }\n    },\n    \"meta\": [],\n    \"rels\": []\n}"
 						}
 					]
-				},
-				{
-					"name": "CP-09 Solicitar permiso",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CP-10 Ver historial de permisos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}",
-							"host": [
-								"{{BASE_URL}}"
-							]
-						}
-					},
-					"response": []
 				},
 				{
 					"name": "CP-11 Comentar en publicaciones (Buzz)",
@@ -4879,6 +4876,34 @@
 							"body": "{\n    \"data\": [\n        {\n            \"empNumber\": 104,\n            \"lastName\": \"010Z\",\n            \"firstName\": \"A8DCo\",\n            \"middleName\": \"4Ys\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 128,\n            \"lastName\": \"444444\",\n            \"firstName\": \"123445\",\n            \"middleName\": \"34\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 86,\n            \"lastName\": \"5TlV\",\n            \"firstName\": \"99N75\",\n            \"middleName\": \"425\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 136,\n            \"lastName\": \"90jsnd\",\n            \"firstName\": \"yedghjb1\",\n            \"middleName\": \"ru84\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 69,\n            \"lastName\": \"Akunuri\",\n            \"firstName\": \"Ranga\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 95,\n            \"lastName\": \"Amiano\",\n            \"firstName\": \"Timothy\",\n            \"middleName\": \"Lewis\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 3,\n            \"lastName\": \"Anderson\",\n            \"firstName\": \"Peter\",\n            \"middleName\": \"Mac\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": 2,\n                \"title\": \"Chief Financial Officer\",\n                \"isDeleted\": false\n            },\n            \"subunit\": {\n                \"id\": 2,\n                \"name\": \"Administration\"\n            },\n            \"location\": {\n                \"id\": 2,\n                \"name\": \"New York Sales Office\"\n            }\n        },\n        {\n            \"empNumber\": 46,\n            \"lastName\": \"B\",\n            \"firstName\": \"Ravi\",\n            \"middleName\": \"M\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 166,\n            \"lastName\": \"Benny\",\n            \"firstName\": \"Thomas\",\n            \"middleName\": \"Kutty\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 116,\n            \"lastName\": \"Brown\",\n            \"firstName\": \"Amelia\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 160,\n            \"lastName\": \"Butler\",\n            \"firstName\": \"James\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 113,\n            \"lastName\": \"Carter\",\n            \"firstName\": \"Charles\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 96,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        },\n        {\n            \"empNumber\": 97,\n            \"lastName\": \"Das\",\n            \"firstName\": \"Rahul\",\n            \"middleName\": \"\",\n            \"terminationId\": null,\n            \"jobTitle\": {\n                \"id\": null,\n                \"title\": null,\n                \"isDeleted\": null\n            },\n            \"subunit\": {\n                \"id\": null,\n                \"name\": null\n            },\n            \"location\": {\n                \"id\": null,\n                \"name\": null\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 101\n    },\n    \"rels\": []\n}"
 						}
 					]
+				},
+				{
+					"name": "CP-09 Solicitar permiso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CP-10 Ver historial de permisos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
 				},
 				{
 					"name": "CP-19 Consultar métricas de empleados activos vs inactivos",
